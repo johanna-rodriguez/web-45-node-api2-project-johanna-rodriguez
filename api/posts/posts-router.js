@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
     const { title, contents} = req.body
     if (!title || !contents) {
         res.status(400).json({
-            message: 'Please provide title and contents for the post'
+            message: 'Please provide title and contents for the post',
         })
     } else {
         Post.insert({ title, contents })
@@ -106,7 +106,7 @@ router.put('/:id', (req, res) => {
                 })
                 .catch(err => {
                     res.status(500).json({
-                        message: "The posts information could no be retrieved",
+                        message: "The post information could not be modified",
                         err: err.message,
                         stack: err.stack,
                     })
