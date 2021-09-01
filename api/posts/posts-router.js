@@ -63,7 +63,7 @@ router.delete('/:id', async (req, res) => {
         const post = await Post.findById(req.params.id)
         if (!post) {
             res.status(404).json({
-                message: 'The post with the specified ID does not exist',
+                message: "The post with the specified ID does not exist",
             })
         } else {
             await Post.remove(req.params.id)
@@ -81,7 +81,7 @@ router.put('/:id', (req, res) => {
         const { title, contents } = req.body
         if (!title || !contents) {
             res.status(400).json({
-                message: "Please provide title and contents for the post"
+                message: "Please provide title and contents for the post",
             })
     } else {
         Post.findById(req.params.id)
@@ -110,11 +110,27 @@ router.put('/:id', (req, res) => {
                         err: err.message,
                         stack: err.stack,
                     })
-                })
+                    })
             }
     })
-router.get('/:id/messages', (req, res) => {
-    
+router.get('/:id/comments', async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id)
+      if (!post) {
+          res.status(404).json({
+              message: "The post with the specified ID does not exist",
+          })
+      } else {
+          const messages = await Post.findPostComments(req.params.id)
+          res.json(messages)
+      }
+    } catch (err) {
+        res.status(500).json({
+            message: "The comments information could not be retrieved",
+            err: err.message,
+            stack: err.stack,
+        })
+    }
 })
 
 
